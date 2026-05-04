@@ -249,7 +249,7 @@ ipcMain.handle('get-database', () => {
 });
 
 // IPC for 3D Visualization (PCA Dimensionality Reduction)
-// Reduz as 768 dimensões do Gemini para apenas 3 (X, Y, Z) para podermos plotar em um gráfico 3D!
+// Reduces the 768 dimensions from Gemini to just 3 (X, Y, Z) so we can plot them on a 3D graph!
 ipcMain.handle('get-3d-embeddings', () => {
     const dbPath = path.join(__dirname, 'embeddings.json');
     if (!fs.existsSync(dbPath)) return {};
@@ -261,9 +261,9 @@ ipcMain.handle('get-3d-embeddings', () => {
     if (vectors.length === 0) return {};
     
     try {
-        // Inicializa o PCA com os vetores originais
+        // Initialize PCA with the original vectors
         const pca = new PCA(vectors);
-        // Reduz a dimensionalidade para 3 componentes principais
+        // Reduce dimensionality to 3 principal components
         const reduced = pca.predict(vectors, { nComponents: 3 }).to2DArray();
         
         const result = {};

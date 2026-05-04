@@ -338,14 +338,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     // =====================================================================
-    // 3D GRAPH LOGIC (Visualização com PCA e Plotly)
+    // 3D GRAPH LOGIC (Visualization with PCA and Plotly)
     // =====================================================================
     const visualize3DBtn = document.getElementById('visualize-3d-btn');
     const graphModal = document.getElementById('graph-modal');
     const closeGraphBtn = document.getElementById('close-graph-btn');
 
     visualize3DBtn.addEventListener('click', async () => {
-        // Obter os vetores já reduzidos pelo backend usando a biblioteca PCA
+        // Get the vectors already reduced by the backend using the PCA library
         visualize3DBtn.innerHTML = `<span>Loading...</span>`;
         
         try {
@@ -380,7 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 type: 'scatter3d',
                 marker: {
                     size: 8,
-                    color: z, // Cores baseadas no eixo Z
+                    color: z, // Colors based on the Z axis
                     colorscale: 'Viridis',
                     opacity: 0.8
                 },
@@ -414,7 +414,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             graphModal.style.display = 'flex';
             
-            // Força o Plotly a recalcular o tamanho assim que o modal for exibido
+            // Forces Plotly to recalculate the size as soon as the modal is displayed
             setTimeout(() => {
                 Plotly.Plots.resize('plot-container');
             }, 100);
