@@ -2,6 +2,10 @@
 
 ![PCA 3D Visualization of Music Embeddings](images/newplot.png)
 
+> **ENG:** *3D representation of the acoustic spectrum using PCA. The mathematics behind the embeddings calculates the distance between audio vectors. Songs with similar genres and feelings naturally form visible clusters, as seen by the distinct groupings on the left and right of the graph.*
+
+> **PT-BR:** *Representação 3D do espectro acústico usando PCA. A matemática dos embeddings calcula a distância entre os vetores de áudio. Músicas de gêneros e "feelings" parecidos naturalmente formam agrupamentos visíveis, como os blocos isolados à esquerda e à direita do gráfico.*
+
 *[Read in English](#english-version) | [Ler em Português](#versão-em-português)*
 
 ---
@@ -64,6 +68,8 @@ Before you begin, you need to have the following tools installed on your compute
 - `@google/genai`: Official SDK for interaction with Gemini AI.
 - `fluent-ffmpeg`: Bridge library to manipulate media files via node.
 - `@ffmpeg-installer/ffmpeg` and `@ffprobe-installer/ffprobe`: "Standalone" binaries that make audio cropping work out-of-the-box, without complex settings for the end-user.
+- `ml-pca`: Machine Learning library for JavaScript, used to perform Principal Component Analysis (PCA) and reduce 768 dimensions to 3.
+- `plotly.js`: Advanced data visualization library used to render the interactive 3D acoustic spectrum.
 
 ---
 *Made in an educational way to explore the boundary between music and AI! 🎸*
@@ -128,6 +134,8 @@ Antes de começar, você precisa ter as seguintes ferramentas instaladas no seu 
 - `@google/genai`: SDK Oficial para a interação com a IA do Gemini.
 - `fluent-ffmpeg`: Biblioteca ponte para manipular arquivos de mídia via node.
 - `@ffmpeg-installer/ffmpeg` e `@ffprobe-installer/ffprobe`: Binários "standalone" que fazem o corte dos áudios funcionarem out-of-the-box, sem configurações complexas para o usuário final.
+- `ml-pca`: Biblioteca de Machine Learning para JavaScript, usada para realizar a Análise de Componentes Principais (PCA) e reduzir as 768 dimensões matemáticas para apenas 3.
+- `plotly.js`: Biblioteca avançada de visualização de dados, usada para renderizar o espectro acústico 3D de forma interativa no frontend.
 
 ---
 *Feito de forma didática para explorar o limite entre a música e a IA! 🎸*
