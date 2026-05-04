@@ -17,6 +17,9 @@ contextBridge.exposeInMainWorld('api', {
     // Front-end asks for the saved songs database
     getDatabase: () => ipcRenderer.invoke('get-database'),
     
+    // Front-end pede as coordenadas 3D para o gráfico
+    get3DEmbeddings: () => ipcRenderer.invoke('get-3d-embeddings'),
+    
     // Continuous event: listening to progress updates from main.js
     onProgress: (callback) => ipcRenderer.on('process-progress', (event, message) => callback(message))
 });

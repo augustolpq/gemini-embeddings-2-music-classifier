@@ -1,5 +1,7 @@
 # Gemini Embeddings 2 Music Classifier 🎵🤖
 
+![PCA 3D Visualization of Music Embeddings](images/newplot.png)
+
 *[Read in English](#english-version) | [Ler em Português](#versão-em-português)*
 
 ---

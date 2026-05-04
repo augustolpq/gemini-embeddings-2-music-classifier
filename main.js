@@ -9,6 +9,7 @@ const fs = require('fs');
 const ffmpeg = require('fluent-ffmpeg');
 const ffmpegInstaller = require('@ffmpeg-installer/ffmpeg');
 const ffprobeInstaller = require('@ffprobe-installer/ffprobe');
+const { PCA } = require('ml-pca');
 
 // Official Google SDK for Gemini
 const { GoogleGenAI } = require('@google/genai');
@@ -245,4 +246,33 @@ ipcMain.handle('get-database', () => {
     const dbPath = path.join(__dirname, 'embeddings.json');
     if (!fs.existsSync(dbPath)) return {};
     return JSON.parse(fs.readFileSync(dbPath, 'utf8'));
+});
+
+// IPC for 3D Visualization (PCA Dimensionality Reduction)
+// Reduz as 768 dimensões do Gemini para apenas 3 (X, Y, Z) para podermos plotar em um gráfico 3D!
+ipcMain.handle('get-3d-embeddings', () => {
+    const dbPath = path.join(__dirname, 'embeddings.json');
+    if (!fs.existsSync(dbPath)) return {};
+    
+    const db = JSON.parse(fs.readFileSync(dbPath, 'utf8'));
+    const labels = Object.keys(db);
+    const vectors = Object.values(db);
+    
+    if (vectors.length === 0) return {};
+    
+    try {
+        // Inicializa o PCA com os vetores originais
+        const pca = new PCA(vectors);
+        // Reduz a dimensionalidade para 3 componentes principais
+        const reduced = pca.predict(vectors, { nComponents: 3 }).to2DArray();
+        
+        const result = {};
+        for (let i = 0; i < labels.length; i++) {
+            result[labels[i]] = reduced[i];
+        }
+        return result;
+    } catch(e) {
+        console.error("PCA Error: ", e);
+        return {};
+    }
 });

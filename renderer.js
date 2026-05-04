@@ -14,7 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
             queueFiles: "Files",
             emptyState: "No files selected.",
             btnCompare: "Launch AI (Compare Songs)",
+            btn3D: "3D Spectrum",
             compareTitle: "Similarity Analyzer (Cosine Approx.)",
+            graphTitle: "Acoustic Spectrum (PCA Visualization)",
             selectReference: "Select a song as a reference...",
             compareEmpty: "Select a reference above to see the most similar ones.",
             pleaseEnterKey: "Please enter your Gemini API Key above!",
@@ -34,7 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
             queueFiles: "Arquivos",
             emptyState: "Nenhum arquivo selecionado.",
             btnCompare: "Iniciar IA (Comparar Músicas)",
+            btn3D: "Espectro 3D",
             compareTitle: "Analisador de Similaridade (Aprox. por Cosseno)",
+            graphTitle: "Espectro Acústico (Visualização PCA)",
             selectReference: "Selecione uma música como referência...",
             compareEmpty: "Selecione uma referência acima para ver as mais similares.",
             pleaseEnterKey: "Por favor, insira sua Chave de API do Gemini acima!",
@@ -333,4 +337,99 @@ document.addEventListener('DOMContentLoaded', () => {
             compareList.appendChild(li);
         });
     });
-});
+    // =====================================================================
+    // 3D GRAPH LOGIC (Visualização com PCA e Plotly)
+    // =====================================================================
+    const visualize3DBtn = document.getElementById('visualize-3d-btn');
+    const graphModal = document.getElementById('graph-modal');
+    const closeGraphBtn = document.getElementById('close-graph-btn');
+
+    visualize3DBtn.addEventListener('click', async () => {
+        // Obter os vetores já reduzidos pelo backend usando a biblioteca PCA
+        visualize3DBtn.innerHTML = `<span>Loading...</span>`;
+        
+        try {
+            const reducedData = await window.api.get3DEmbeddings();
+            const labels = Object.keys(reducedData);
+            
+            if (labels.length < 3) {
+                alert("Please add at least 3 songs to generate a 3D graph.");
+                visualize3DBtn.innerHTML = `<span>${translations[currentLang].btn3D}</span>`;
+                return;
+            }
+
+            const x = [];
+            const y = [];
+            const z = [];
+            const text = [];
+
+            labels.forEach(label => {
+                const vector = reducedData[label];
+                x.push(vector[0]);
+                y.push(vector[1]);
+                z.push(vector[2]);
+                text.push(label);
+            });
+
+            const trace = {
+                x: x,
+                y: y,
+                z: z,
+                text: text,
+                mode: 'markers+text',
+                type: 'scatter3d',
+                marker: {
+                    size: 8,
+                    color: z, // Cores baseadas no eixo Z
+                    colorscale: 'Viridis',
+                    opacity: 0.8
+                },
+                textposition: 'top center',
+                textfont: {
+                    color: '#ffffff',
+                    size: 10
+                }
+            };
+
+            const layout = {
+                margin: { l: 0, r: 0, b: 0, t: 0 },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                autosize: true,
+                scene: {
+                    xaxis: { title: 'Component 1', backgroundcolor: "rgba(0,0,0,0)", gridcolor: "#444" },
+                    yaxis: { title: 'Component 2', backgroundcolor: "rgba(0,0,0,0)", gridcolor: "#444" },
+                    zaxis: { title: 'Component 3', backgroundcolor: "rgba(0,0,0,0)", gridcolor: "#444" },
+                    camera: { eye: { x: 1.5, y: 1.5, z: 1.5 } }
+                }
+            };
+
+            const config = { 
+                responsive: true,
+                displayModeBar: true,
+                displaylogo: false
+            };
+
+            Plotly.newPlot('plot-container', [trace], layout, config);
+            
+            graphModal.style.display = 'flex';
+            
+            // Força o Plotly a recalcular o tamanho assim que o modal for exibido
+            setTimeout(() => {
+                Plotly.Plots.resize('plot-container');
+            }, 100);
+            
+        } catch (error) {
+            console.error(error);
+            alert("Error generating 3D Graph.");
+        } finally {
+            visualize3DBtn.innerHTML = `
+                <span data-i18n="btn3D">${translations[currentLang].btn3D}</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+            `;
+        }
+    });
+
+    closeGraphBtn.addEventListener('click', () => {
+        graphModal.style.display = 'none';
+    });});

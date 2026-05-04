@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Audio Embedder</title>
+    <!-- Plotly.js for 3D Graphs -->
+    <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
     <link rel="stylesheet" href="index.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap" rel="stylesheet">
@@ -70,10 +72,15 @@
             </div>
 
             <!-- COMPARISON MODULE -->
-            <div class="hero-section" style="margin-top: 40px; margin-bottom: 20px;">
+            <div class="hero-section" style="margin-top: 40px; margin-bottom: 20px; display: flex; justify-content: center; gap: 15px;">
                 <button id="compare-btn" class="primary-btn glass-btn" style="background: linear-gradient(135deg, #10b981, #059669);">
                     <span data-i18n="btnCompare">Launch AI (Compare Songs)</span>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"></path></svg>
+                </button>
+
+                <button id="visualize-3d-btn" class="primary-btn glass-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                    <span data-i18n="btn3D">3D Spectrum</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
                 </button>
             </div>
             
@@ -90,6 +97,17 @@
                     <ul id="compare-list">
                         <div class="empty-state" data-i18n="compareEmpty">Select a reference above to see the most similar ones.</div>
                     </ul>
+                </div>
+            </div>
+
+            <!-- 3D GRAPH MODAL -->
+            <div id="graph-modal" class="modal-overlay" style="display: none;">
+                <div class="modal-content glass-panel">
+                    <div class="modal-header">
+                        <h3 data-i18n="graphTitle">Acoustic Spectrum (PCA)</h3>
+                        <button id="close-graph-btn" class="icon-btn">✕</button>
+                    </div>
+                    <div id="plot-container"></div>
                 </div>
             </div>
         </main>
